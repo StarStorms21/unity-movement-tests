@@ -77,12 +77,7 @@ public class MovementController : MonoBehaviour {
     public float walkTilt;
     public float runTilt;
 
-    [Header("Step Up")]
-    public Transform FeetHeight;
-    public Transform KneeHeight;
-
-    public float stepHeight = 0.3f;
-    public float stepSmouth = 0.1f;
+  
 
     [Header("Velocity")]
     public Vector3 MovementVelocity;
@@ -132,8 +127,7 @@ public class MovementController : MonoBehaviour {
 
         forwardMovementVector = transform.forward * Mathf.Lerp(prevTotalMovement,totalMovement,Time.deltaTime);
         if(forwardMovementVector.magnitude > 1) forwardMovementVector /= forwardMovementVector.magnitude;
-        TryStepUp();
-
+       
 
         Move((transform.forward * totalMovement/20) * finalSpeedVel);
 
@@ -278,48 +272,8 @@ public class MovementController : MonoBehaviour {
 
     }
 
-    Vector3 hit;
-    private void TryStepUp(){
+   
 
-        if(CanStepUp(.37f) && forwardMovementVector.magnitude>0) {
-            
-            //float step_up_speed = stepSmouth * Time.deltaTime;
-           // Move(new Vector3(0, step_up_speed, 0));
-            //cullSpeedOnStairs(runSpeed/1.8f);
-        }
-    }
-
-    private bool CanStepUp(float lowHitLen) {
-        float kneeHitLen = lowHitLen + 0.1f;
-
-        RaycastHit lowHit;
-
-        if(Physics.Raycast(FeetHeight.position, transform.TransformDirection(Vector3.forward), out lowHit, lowHitLen)) {
-            RaycastHit upHit;
-            if(!Physics.Raycast(KneeHeight.position, transform.TransformDirection(Vector3.forward), out upHit, kneeHitLen)) {
-                return true;
-            }
-        }
-
-        RaycastHit lowHit45;
-        if(Physics.Raycast(FeetHeight.position, transform.TransformDirection(1.5f, 0, 1), out lowHit45, lowHitLen)) {
-            RaycastHit upHit45;
-            if(!Physics.Raycast(KneeHeight.position, transform.TransformDirection(1.5f, 0, 1), out upHit45, kneeHitLen)) {
-                return true;
-            }
-        }
-
-        RaycastHit lowHit45m;
-        if(Physics.Raycast(FeetHeight.position, transform.TransformDirection(-1.5f, 0, 1), out lowHit45m, lowHitLen)) {
-            RaycastHit upHit45m;           
-            if(!Physics.Raycast(KneeHeight.position, transform.TransformDirection(-1.5f, 0, 1), out upHit45m, kneeHitLen)) {
-
-                return true;
-            }
-        }
-
-        return false;;
-    }
     private void cullSpeedOnStairs(float speedToHit) {
         if(_isRunning) {
             finalSpeedVel = Mathf.Lerp(finalSpeedVel, speedToHit, Time.deltaTime * deceleration + 0.1f);
